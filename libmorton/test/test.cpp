@@ -84,36 +84,45 @@ int main(int argc, char *argv[]) {
 	Timer morton_decode_magicbits;
 	morton_decode_magicbits.reset();
 	morton_decode_magicbits.start();
-	for (size_t i = 0; i < MAX; i++){
-		for (size_t j = 0; j < MAX; j++){
-			for (size_t k = 0; k < MAX; k++){
-				uint64_t s = mortonEncode_LUT(i, j, k);
-				if (i != mortonDecode_magicbits_X(s) || j != mortonDecode_magicbits_Y(s) || k != mortonDecode_magicbits_Z(s)){
-					cout << "Encode and decode don't match" << endl;
-				}
-			}
-		}
-	}
+//	for (size_t i = 0; i < MAX; i++){
+//		for (size_t j = 0; j < MAX; j++){
+//			for (size_t k = 0; k < MAX; k++){
+//				uint64_t s = mortonEncode_LUT(i, j, k);
+//				if (i != mortonDecode_magicbits_X(s) || j != mortonDecode_magicbits_Y(s) || k != mortonDecode_magicbits_Z(s)){
+//					cout << "Encode and decode don't match" << endl;
+//				}
+//			}
+//		}
+//	}
+    unsigned int x, y, z;
+    for (size_t i = 0; i < MAX*MAX*MAX; i++) {
+        mortonDecode_magicbits_X(i);
+        mortonDecode_magicbits_Y(i);
+        mortonDecode_magicbits_Z(i);
+    }
 	morton_decode_magicbits.stop();
-	cout << "Magicbits method: " << morton_decode_magicbits.getTotalTimeMs() - morton_LUT.getTotalTimeMs() << " ms" << endl; // we subtract morton code generation time with LUT-based method
+	cout << "Magicbits method: " << morton_decode_magicbits.getTotalTimeMs() << " ms" << endl; // we subtract morton code generation time with LUT-based method
 
 	Timer morton_decode_for;
 	morton_decode_for.reset();
 	morton_decode_for.start();
-	for (size_t i = 0; i < MAX; i++){
-		for (size_t j = 0; j < MAX; j++){
-			for (size_t k = 0; k < MAX; k++){
-				uint64_t s = mortonEncode_LUT(i, j, k);
-				unsigned int x = 0;
-				unsigned int y = 0;
-				unsigned int z = 0;
-				mortonDecode_for(s, x, y, z);
-				if (i != x || j != y || k != z){
-					cout << "Encode and decode don't match" << endl;
-				}
-			}
-		}
-	}
+//	for (size_t i = 0; i < MAX; i++){
+//		for (size_t j = 0; j < MAX; j++){
+//			for (size_t k = 0; k < MAX; k++){
+//				uint64_t s = mortonEncode_LUT(i, j, k);
+//				unsigned int x = 0;
+//				unsigned int y = 0;
+//				unsigned int z = 0;
+//				mortonDecode_for(s, x, y, z);
+//				if (i != x || j != y || k != z){
+//					cout << "Encode and decode don't match" << endl;
+//				}
+//			}
+//		}
+//	}
+    for (size_t i = 0; i < MAX*MAX*MAX; i++) {
+        mortonDecode_for(i, x, y, z);
+    }
 	morton_decode_for.stop();
-	cout << "For-loop method: " << morton_decode_for.getTotalTimeMs() - morton_LUT.getTotalTimeMs() << " ms" << endl; // we subtract morton code generation time with LUT method
+	cout << "For-loop method: " << morton_decode_for.getTotalTimeMs() << " ms" << endl; // we subtract morton code generation time with LUT method
 }
